@@ -1,0 +1,126 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// 🎯 You can edit or add your own questions here easily
+const questions = [
+  {
+    question: "FogoChain kis type ka blockchain hai?",
+    options: ["Layer-2", "Layer-1", "Sidechain", "Parachain"],
+    correct: "Layer-1",
+  },
+  {
+    question: "FogoChain kis virtual machine ke sath compatible hai?",
+    options: ["EVM", "WASM", "SVM", "JVM"],
+    correct: "SVM",
+  },
+  {
+    question: "FogoChain ke NFTs ke liye pehla marketplace kaunsa hai?",
+    options: ["OpenSea", "Magic Eden", "Velixo", "Blur"],
+    correct: "Velixo",
+  },
+  {
+    question: "FogoChain ki performance ke liye kaunsa client use hota hai?",
+    options: ["Parity", "Firedancer", "Geth", "Tendermint"],
+    correct: "Firedancer",
+  },
+  {
+    question: "FogoChain ka main focus kya hai?",
+    options: [
+      "Gaming",
+      "DeFi & High-speed trading",
+      "Social Media",
+      "Data storage",
+    ],
+    correct: "DeFi & High-speed trading",
+  },
+  {
+    question: "FogoChain kis protocol ke sath bridge partnership me hai?",
+    options: ["Wormhole", "Axelar", "LayerZero", "Polygon Bridge"],
+    correct: "Wormhole",
+  },
+  {
+    question: "FogoChain ka first NFT testnet wallet support kis wallet ne diya hai?",
+    options: ["Phantom", "MetaMask", "Nightly Wallet", "OKX Wallet"],
+    correct: "Nightly Wallet",
+  },
+  {
+    question: "FogoChain ki total token supply kitni hai?",
+    options: ["1 Billion", "10 Billion", "100 Million", "50 Billion"],
+    correct: "10 Billion",
+  },
+  {
+    question: "FogoChain ka curated validator model ka main purpose kya hai?",
+    options: ["Censorship", "Security & Performance", "Randomization", "Reward boosting"],
+    correct: "Security & Performance",
+  },
+  {
+    question: "NFTs ke liye FogoChain ka advantage kya hai?",
+    options: ["Slow confirmation", "High gas fees", "Fast & scalable minting", "Manual consensus"],
+    correct: "Fast & scalable minting",
+  },
+];
+
+export default function FogoQuiz() {
+  const [step, setStep] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selected, setSelected] = useState("");
+  const [finished, setFinished] = useState(false);
+
+  const current = questions[step];
+
+  const handleSelect = (opt: string) => {
+    setSelected(opt);
+    if (opt === current.correct) {
+      setScore((prev) => prev + 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (step + 1 < questions.length) {
+      setStep((prev) => prev + 1);
+      setSelected("");
+    } else {
+      setFinished(true);
+    }
+  };
+
+  const restart = () => {
+    setStep(0);
+    setScore(0);
+    setSelected("");
+    setFinished(false);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 text-white p-6">
+      <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl w-full max-w-2xl shadow-2xl text-center">
+        {!finished ? (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h1 className="text-3xl font-bold mb-6">🔥 FogoChain NFT Quiz</h1>
+              <p className="text-xl mb-4">
+                Question {step + 1} of {questions.length}
+              </p>
+              <h2 className="text-2xl font-semibold mb-6">{current.question}</h2>
+
+              <div className="grid gap-4">
+                {current.options.map((opt) => (
+                  <motion.button
+                    key={opt}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleSelect(opt)}
+                    disabled={!!selected}
+                    className={`p-4 rounded-2xl text-lg font-medium transition-all border 
+                      ${
+                        selected
+                          ? opt === current.correct
+                            ? "bg-green-600 border-green-400"
